@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Clink-n-Clank/Brokkr/component/background"
+	"github.com/clinknclank/brokkr/component/background"
 	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"

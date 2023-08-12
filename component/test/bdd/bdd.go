@@ -1,7 +1,7 @@
 package bdd
 
 import (
-	"github.com/Clink-n-Clank/Brokkr/component/test/bdd/tester"
+	"github.com/clinknclank/brokkr/component/test/bdd/tester"
 	"github.com/cucumber/godog"
 	"github.com/spf13/pflag"
 )

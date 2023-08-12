@@ -1,0 +1,97 @@
+---
+name: CI
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validating project on Go ${{ matrix.go }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Experimental version must be always second
+        go: ["1.20", "1.21"]
+        include:
+          - go: "1.20"
+            continue-on-error: false
+          - go: "1.21"
+            continue-on-error: true
+    permissions:
+      id-token: write
+      contents: read
+      packages: read
+    continue-on-error: ${{ matrix.continue-on-error }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Go ${{ matrix.go }}
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go }}
+          go-version-file: "go.mod"
+          cache: false
+          # Full git history is needed to get a proper
+          # list of changed files within `super-linter`
+          fetch-depth: 0
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          args: --config=.golangci.yml
+          version: v1.53
+      - name: Build Go
+        run: go build -v ./...
+      - name: Go Unit Test
+        run: |
+          go test -v --race $(go list ./... | (grep -v /vendor/) | (grep -v internal/test/bdd/integration_tests))
+  confirm:
+    needs: ["validating"]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go: [ "1.20" ]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go }}
+      - name: Go Unit Test - with cover
+        run: |
+          go test -v --race $(go list ./... | (grep -v /vendor/) | (grep -v internal/test/bdd/integration_tests)) -covermode=atomic -coverprofile=coverage.out
+          go tool cover -func=coverage.out -o=coverage.out
+      - name: Go Coverage Badge  # Pass the `coverage.out` output to this action
+        uses: tj-actions/coverage-badge-go@v2.4
+        with:
+          filename: coverage.out
+      - name: Verify Changed files
+        uses: tj-actions/verify-changed-files@v16.0.1
+        id: verify-changed-files
+        with:
+          files: README.md
+      - name: Commit changes
+        if: steps.verify-changed-files.outputs.files_changed == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git commit -m "chore: Updated coverage badge."
+      - name: Push changes
+        if: steps.verify-changed-files.outputs.files_changed == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ github.token }}
+          branch: ${{ github.head_ref }}
+  result:
+    needs:
+      - "validate"
+      - "confirm"
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Done"

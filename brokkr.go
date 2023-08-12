@@ -13,7 +13,7 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/Clink-n-Clank/Brokkr/component/background"
+	"github.com/clinknclank/brokkr/component/background"
 )
 
 type (

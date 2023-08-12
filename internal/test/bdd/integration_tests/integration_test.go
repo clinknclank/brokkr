@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/Clink-n-Clank/Brokkr/component/test/bdd"
+	"github.com/clinknclank/brokkr/component/test/bdd"
 )
 
 func TestMain(m *testing.M) {

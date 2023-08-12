@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/Clink-n-Clank/Brokkr/component/background"
+	"github.com/clinknclank/brokkr/component/background"
 )
 
 // BackgroundServer wrapper

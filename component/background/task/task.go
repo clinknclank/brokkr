@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Clink-n-Clank/Brokkr/component/background"
+	"github.com/clinknclank/brokkr/component/background"
 )
 
 type (

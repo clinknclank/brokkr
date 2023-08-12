@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Clink-n-Clank/Brokkr/component/test/bdd/tester/metrics"
+	"github.com/clinknclank/brokkr/component/test/bdd/tester/metrics"
 )
 
 // ActorAPI container context

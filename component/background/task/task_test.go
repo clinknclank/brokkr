@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/Clink-n-Clank/Brokkr/component/execution"
+	"github.com/clinknclank/brokkr/component/execution"
 )
 
 func TestCronWorker_StartProcessStop(t *testing.T) {

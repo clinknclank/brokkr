@@ -8,8 +8,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/Clink-n-Clank/Brokkr/component/background"
-	"github.com/Clink-n-Clank/Brokkr/component/execution"
+	"github.com/clinknclank/brokkr/component/background"
+	"github.com/clinknclank/brokkr/component/execution"
 )
 
 func TestBrokkr_StartStop(t *testing.T) {

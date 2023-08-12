@@ -1,6 +1,6 @@
 package bdd
 
-import "github.com/Clink-n-Clank/Brokkr/component/test/bdd/tester"
+import "github.com/clinknclank/brokkr/component/test/bdd/tester"
 
 func preloadScenarioActions(t *Tester, a *tester.ActorAPI) {
 	//
