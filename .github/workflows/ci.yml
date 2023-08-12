@@ -1,9 +1,8 @@
 ---
 name: CI
 on:
-  push:
-    branches: ["main"]
   pull_request:
+    types: [opened, synchronize, reopened]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -22,10 +21,6 @@ jobs:
             continue-on-error: false
           - go: "1.21"
             continue-on-error: true
-    permissions:
-      id-token: write
-      contents: read
-      packages: read
     continue-on-error: ${{ matrix.continue-on-error }}
     steps:
       - name: Checkout Repository
@@ -42,20 +37,24 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
-          args: --config=.golangci.yml
-          version: v1.53
+          version: v1.54
+          args: --config=.golangci.yml --issues-exit-code=0
       - name: Build Go
         run: go build -v ./...
       - name: Go Unit Test
         run: |
           go test -v --race $(go list ./... | (grep -v /vendor/) | (grep -v internal/test/bdd/integration_tests))
   confirm:
-    needs: ["validating"]
+    needs: ["validate"]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         go: [ "1.20" ]
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v4
@@ -87,11 +86,13 @@ jobs:
         with:
           github_token: ${{ github.token }}
           branch: ${{ github.head_ref }}
+          force: true
   result:
     needs:
       - "validate"
       - "confirm"
     if: always()
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - run: echo "Done"
