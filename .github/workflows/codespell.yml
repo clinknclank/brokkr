@@ -1,9 +1,8 @@
 ---
 name: Codespell
-
 on:
   pull_request:
-  push:
+    types: [opened, synchronize, reopened]
 
 permissions:
   contents: read  #  to fetch code (actions/checkout)
