@@ -1,5 +1,5 @@
 # Brokkr
-![Coverage](https://img.shields.io/badge/Coverage-82.9%25-brightgreen)
+![Coverage](https://img.shields.io/badge/Coverage-83.6%25-brightgreen)
 ![GitHub Super-Linter](https://github.com/clinknclank/brokkr/actions/workflows/lint.yml/badge.svg)
 
 ## About Brokkr
