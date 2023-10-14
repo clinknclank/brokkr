@@ -87,12 +87,3 @@ jobs:
           github_token: ${{ github.token }}
           branch: ${{ github.head_ref }}
           force: true
-  result:
-    needs:
-      - "validate"
-      - "confirm"
-    if: always()
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - run: echo "Done"
